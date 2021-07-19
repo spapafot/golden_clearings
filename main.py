@@ -83,7 +83,7 @@ def send(debit_note, data, email):
     debit_ = debit_name[:-4]
     subject = f"ΕΚΚΑΘΑΡΙΣΗ {debit_}"
     body = data
-    sender_email = email
+    sender_email = EMAIL
     receiver_email = email
     password = EMAIL_PASS
 
