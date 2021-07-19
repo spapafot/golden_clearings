@@ -15,11 +15,12 @@ pdf_file = PyPDF2.PdfFileReader(debit_name)
 num_pages = pdf_file.getNumPages()
 page_breaks = []
 start_page = 0
-EMAIL = ""
-EMAIL_PASS = ""
+EMAIL = "*@gmail.com"
+EMAIL_PASS = "*"
 file_list = []
 
-data = f"Αγαπητοί συνεργάτες, \n\nΣας αποστέλουμε εκκαθάριση εισιτηρίων για την περίοδο {start_date}-{end_date}\n\n" \
+data = f"Αγαπητοί συνεργάτες, \n\n" \
+       f"Σας αποστέλουμε εκκαθάριση εισιτηρίων για την περίοδο {start_date}-{end_date}\n\n" \
        f"Παρακαλούμε για την εξόφληση στον παρακάτω λογαριασμό\n\n" \
        f"Στοιχεία τιμολόγησης:\n\n" \
        f"GALAXY MARITIME S.A. (BRANCH OFFICE)\n" \
@@ -30,8 +31,11 @@ data = f"Αγαπητοί συνεργάτες, \n\nΣας αποστέλουμ�
        f"Με εκτίμηση\n" \
        f"Για το πρακτορείο"
 
-agency_list = [{"agency": "TAKIS TRAVEL", "email": EMAIL},
-               {"agency": "MILANO TRAVEL", "email": EMAIL},
+MILANO_EMAIL = "spapafot@gmail.com"
+TAKIS_TRAVEL_EMAIL = "vickyvasileiou7@gmail.com"
+
+agency_list = [{"agency": "TAKIS TRAVEL", "email": TAKIS_TRAVEL_EMAIL},
+               {"agency": "MILANO TRAVEL", "email": MILANO_EMAIL},
                {"agency": "AFOI BARKABAS", "email": EMAIL},
                {"agency": "MAI TRAVEL", "email": EMAIL},
                {"agency": "BALKAN LINE", "email": EMAIL},
@@ -116,10 +120,10 @@ def send(debit_note, data, email):
     text = message.as_string()
 
     # Log in to server using secure context and send email
-    context = ssl.create_default_context()
-    with smtplib.SMTP_SSL("smtp.gmail.com", context=context) as server:
-        server.login(sender_email, password)
-        server.sendmail(sender_email, receiver_email, text)
+    connection = smtplib.SMTP("smtp.gmail.com")
+    connection.starttls()
+    connection.login(EMAIL, EMAIL_PASS)
+    connection.sendmail(sender_email, receiver_email, text)
 
 
 def find_agency_clearing(pdf_):
