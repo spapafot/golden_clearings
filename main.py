@@ -9,19 +9,24 @@ from email.mime.text import MIMEText
 
 start_date = "01/07/2021"
 end_date = "15/07/2021"
-debit_name = "4714.pdf"
+debit_name = "2020042.pdf"
 
 pdf_file = PyPDF2.PdfFileReader(debit_name)
 num_pages = pdf_file.getNumPages()
 page_breaks = []
 start_page = 0
-EMAIL = "*@gmail.com"
+EMAIL = "ashipsagency@gmail.com"
 EMAIL_PASS = "*"
 file_list = []
 
 data = f"Αγαπητοί συνεργάτες, \n\n" \
        f"Σας αποστέλουμε εκκαθάριση εισιτηρίων για την περίοδο {start_date}-{end_date}\n\n" \
        f"Παρακαλούμε για την εξόφληση στον παρακάτω λογαριασμό\n\n" \
+       f"PIRAEUS BANK\n" \
+       f"5403 099834 329\n\n" \
+       f"BIC: PIRBGRAA\n" \
+       f"IBAN: GR43 0172 4030 0054 0309 9834 329\n" \
+       f"Golden Bridge Agency OE\n\n" \
        f"Στοιχεία τιμολόγησης:\n\n" \
        f"GALAXY MARITIME S.A. (BRANCH OFFICE)\n" \
        f"MACHIS ANALATOU 111\n" \
@@ -31,15 +36,33 @@ data = f"Αγαπητοί συνεργάτες, \n\n" \
        f"Με εκτίμηση\n" \
        f"Για το πρακτορείο"
 
-MILANO_EMAIL = "spapafot@gmail.com"
-TAKIS_TRAVEL_EMAIL = "vickyvasileiou7@gmail.com"
+TAKIS_TRAVEL_EMAIL = "takistrv@otenet.gr"
+MILANO_TRAVEL_EMAIL = "milanotvl.igou@gmail.com"
+AFOI_BARKABAS_EMAIL = "infobarkabas@gmail.com"
+MAI_EMAIL = "maitrv@otenet.gr"
+BALCAN_EMAIL = "balkanlogistirio@gmail.com"
+LAGOS_EMAIL = "oscartravel.gr@gmail.com"
+KOTSIS_EMAIL = "info@kotsistravel.gr"
+PANTAZI_EMAIL = "pantazi.travel@gmail.com"
+EPHIRA_EMAIL = "ephiratr@otenet.gr"
+LAKMOS_EMAIL = "ferryreservations@lakmostravel.com"
+BAKOLIAS_EMAIL = "euroline@otenet.gr"
+ISABELLA_EMAIL = "sivotatour@gmail.com"
+ARGUR_EMAIL = "sivo-tra@otenet.gr"
 
 agency_list = [{"agency": "TAKIS TRAVEL", "email": TAKIS_TRAVEL_EMAIL},
-               {"agency": "MILANO TRAVEL", "email": MILANO_EMAIL},
-               {"agency": "AFOI BARKABAS", "email": EMAIL},
-               {"agency": "MAI TRAVEL", "email": EMAIL},
-               {"agency": "BALKAN LINE", "email": EMAIL},
-               {"agency": "LAGOS THEODOROS", "email": EMAIL}]
+               {"agency": "MILANO TRAVEL", "email": MILANO_TRAVEL_EMAIL},
+               {"agency": "AFOI BARKABAS", "email": AFOI_BARKABAS_EMAIL},
+               {"agency": "MAI TRAVEL", "email": MAI_EMAIL},
+               {"agency": "BALCAN LINE", "email": BALCAN_EMAIL},
+               {"agency": "KOTSIS", "email": KOTSIS_EMAIL},
+               {"agency": "PANTAZI", "email": PANTAZI_EMAIL},
+               {"agency": "EPHIRA", "email": EPHIRA_EMAIL},
+               {"agency": "LAKMOS", "email": LAKMOS_EMAIL},
+               {"agency": "BAKOLIAS", "email": BAKOLIAS_EMAIL},
+               {"agency": "ISABELLA", "email": ISABELLA_EMAIL},
+               {"agency": "LAGOS", "email": LAGOS_EMAIL},
+               {"agency": "ARGUR", "email": ARGUR_EMAIL},]
 
 with pdfplumber.open(debit_name) as pdf:
     for index, page in enumerate(pdf.pages):
@@ -85,41 +108,33 @@ def send(debit_note, data, email):
     body = data
     sender_email = EMAIL
     receiver_email = email
-    password = EMAIL_PASS
 
-    # Create a multipart message and set headers
     message = MIMEMultipart()
     message["From"] = sender_email
     message["To"] = receiver_email
     message["Subject"] = subject
-    message["Bcc"] = receiver_email  # Recommended for mass emails
 
-    # Add body to email
     message.attach(MIMEText(body, "plain"))
 
-    filename = debit_note  # In same directory as script
+    filename = debit_note
 
-    # Open PDF file in binary mode
+    #binary mode
     with open(filename, "rb") as attachment:
-        # Add file as application/octet-stream
-        # Email client can usually download this automatically as attachment
+
         part = MIMEBase("application", "octet-stream")
         part.set_payload(attachment.read())
 
-    # Encode file in ASCII characters to send by email
+    # ASCII
     encoders.encode_base64(part)
 
-    # Add header as key/value pair to attachment part
     part.add_header(
         "Content-Disposition",
         f"attachment; filename= {filename}",
     )
 
-    # Add attachment to message and convert message to string
     message.attach(part)
     text = message.as_string()
 
-    # Log in to server using secure context and send email
     connection = smtplib.SMTP("smtp.gmail.com")
     connection.starttls()
     connection.login(EMAIL, EMAIL_PASS)
