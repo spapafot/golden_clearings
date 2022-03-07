@@ -10,9 +10,11 @@ identifier = "11 745"  # usually the postal code is enough as an identifier, alw
 EMAIL = os.environ.get("EMAIL")
 EMAIL_PASS = os.environ.get("EMAIL_PASS")
 
+# make sure that the agency names are registered in FORTHCrs with the same names, addd them all here
 agency_list = [
-    {"agency": "TAKIS TRAVEL", "email": "spapafot@gmail.com"},
-    {"agency": "MILANO TRAVEL", "email": "spapafot@gmail.com"},
+    {"agency": "SOMETHING TRAVEL", "email": "email@gmail.com"},
+    {"agency": "SOMETHING ELSE TRAVEL", "email": "another_email@gmail.com"},
+    ...
 ]
 
 data = f"Αγαπητοί συνεργάτες, \n\n" \
